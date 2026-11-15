@@ -1,43 +1,30 @@
-Tokyo Xtreme Racer Extractor
-============================
+# TXRExtractor2
 
-TXRExtractor is an archive unpacker for GENKI Tokyo Xtreme Racer series games.
-Currently supported archive extraction include WMN.DAT and AUDIO_PS3.DAT from Wangan Midnight PS3.
+TXRExtractor2 unpacks a Wangan Midnight or Import Tuner Challenge build package into GLB models and PNG textures. It is a fork of [fatalhalt/TXRExtractor](https://github.com/fatalhalt/TXRExtractor). The original program is GPL-2.0, and so is this one.
 
-Wangan Midnight uses zlib deflate chunks that inflate up to 256KB and files are
-composed of them. See relevant header files for reverse engineered headers and their description.
+## Export
 
-## NOTES
+Pick the archive, its TOC, and an output folder.
 
-VC2013 was used to create project. Currently win32 target is only supported.
-You need to have copy of a game or archives to attempt to extract them.
+- Wangan Midnight: `WMN.DAT` and `WMN.TOC`.
+- Import Tuner Challenge: `BUILD_CRS.DAT` or `BUILD.DAT`, with the matching `.TOC`.
 
-## Status
+The format is detected from the TOC. Raw records, models, and textures can be turned off independently. The combined map writes one GLB of every exported mesh and is off by default, because a full course is about a gigabyte.
 
-* Wangan Midnight 2007 PS3......................: WMN.DAT [ok], AUDIO_PS3.DAT [ok]
-* Import Tuner Challenge 2006 Xbox 360...: [wip]
+An optional deprotected ITC image places the checker models. Without it, those two models are still exported, unplaced.
 
-## XMD Models and XTD Textures
+From a terminal:
 
-Included is 3ds Max script that can load unpacked models and textures
+```
+TXRExtractor2 <archive> <toc> <output> [image]
+TXRExtractor2 --combine <archive> <toc> <output> [image]
+TXRExtractor2 --selftest
+```
 
-## GUI
+## Output
 
-Simple Win32 GUI frontend is included, see "Releases" section of this github page
-![gui](https://raw.githubusercontent.com/fatalhalt/TXRExtractor/master/img/gui.jpg?raw=true)
+ITC records land in `raw/`, `models/rec_<id>.glb`, and `textures/own/<id>/`. The course set lands in `textures/course/` and `courseset/`. A standalone texture package lands in `textures/`.
 
-## Command Line Usage
+Wangan Midnight keeps the TOC paths. Each `.GRID` also becomes a `.glb`, and each `.GTF` becomes a PNG beside it. A material's diffuse bitmap is embedded when that PNG was exported.
 
-From console:
-
-     TXRExtractor.exe <archive> <table of content> <output>
-
-
-## Goal
-
-
-The goal of the project is to be able to import 3d models of Shuto expressway into
-other environments such as GTA IV, rFactor 2, Assetto Corsa, or standalone game engine.
-
-
-![c1](https://raw.githubusercontent.com/fatalhalt/TXRExtractor/master/img/c1.jpg?raw=true)
+Material names stay the texture tokens from the package (`wall_hiru03`, `an13_check_00`).

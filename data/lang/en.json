@@ -1,0 +1,14 @@
+{
+  "txr.tab.package": "Package",
+  "txr.archive": "Archive",
+  "txr.toc": "TOC",
+  "txr.output": "Output",
+  "txr.image": "ITC image (optional, checker placement)",
+  "txr.raw": "Unpack raw records",
+  "txr.models": "Models (GLB)",
+  "txr.textures": "Textures (PNG)",
+  "txr.combine": "One combined map GLB",
+  "txr.export": "Export",
+  "txr.stop": "Stop",
+  "txr.browse": "Browse"
+}

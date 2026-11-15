@@ -1,0 +1,67 @@
+name: Build
+
+on:
+  push:
+    branches: [master, main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: ${{ matrix.platform }}-${{ matrix.arch }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: linux
+            arch: x64
+            os: ubuntu-24.04
+          - platform: linux
+            arch: arm64
+            os: ubuntu-24.04-arm
+          - platform: windows
+            arch: x64
+            os: windows-2025
+          - platform: windows
+            arch: arm64
+            os: windows-11-arm
+          - platform: macos
+            arch: arm64
+            os: macos-15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgl1-mesa-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev
+      - name: Build
+        run: python build_release.py --clean --${{ matrix.platform }} --${{ matrix.arch }}
+      - uses: actions/upload-artifact@v7
+        with:
+          name: TXRExtractor2-${{ matrix.platform }}-${{ matrix.arch }}
+          path: dist/TXRExtractor2-${{ matrix.platform }}-${{ matrix.arch }}.zip
+          if-no-files-found: error
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: TXRExtractor2-*
+          path: packages
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: packages/**/*.zip

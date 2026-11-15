@@ -1,0 +1,19 @@
+TXRExtractor2
+Copyright (C) 2026
+
+This program is free software under the GNU General Public License version 2.
+See LICENSE.
+
+It is a fork of TXRExtractor by fatalhalt:
+https://github.com/fatalhalt/TXRExtractor
+The Wangan Midnight container, GTF header, and XMD layout in reference/wmn.ms
+come from that project. The reference Max script and credits are kept for the
+format notes only.
+
+Third-party components fetched or shipped with the build:
+
+- Dear ImGui, MIT License, https://github.com/ocornut/imgui
+- GLFW, zlib/libpng license, https://www.glfw.org/
+- zlib, zlib license, https://zlib.net/
+- nlohmann/json, MIT License, https://github.com/nlohmann/json
+- Open Sans, SIL Open Font License 1.1, fonts/OFL.txt
